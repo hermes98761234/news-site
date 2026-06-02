@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     include: ['__tests__/**/*.test.{ts,tsx}'],
-    setupFiles: ['__tests__/setup.ts'],
+    setupFiles: ['vitest.setup.ts'],
   },
   resolve: {
     alias: {
