@@ -20,10 +20,11 @@ export const api = {
     get: (slug: string) => fetchApi<ArticleWithTags>(`/articles/${slug}`),
     slugs: async () => {
       const data = await fetchApi<PaginatedArticles>('/articles?limit=1000')
-      return data.items.map(i => i.article.slug)
+      return data.items.map(i => i.slug)
     },
   },
   pages: {
+    list: () => fetchApi<Page[]>('/pages'),
     get: (slug: string) => fetchApi<Page>(`/pages/${slug}`),
   },
   tags: {

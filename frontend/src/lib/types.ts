@@ -26,8 +26,7 @@ export interface Article {
   updated_at: string
 }
 
-export interface ArticleWithTags {
-  article: Article
+export interface ArticleWithTags extends Article {
   tags: Tag[]
   category: Category | null
 }

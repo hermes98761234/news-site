@@ -24,7 +24,7 @@ function formatDate(dateStr: string): string {
 
 export default async function ArticlePage({ params }: Props) {
   const data: ArticleWithTags = await api.articles.get(params.slug)
-  const { article: a, tags, category } = data
+  const { tags, category, ...a } = data
 
   return (
     <article>

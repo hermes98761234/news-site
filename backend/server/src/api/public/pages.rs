@@ -5,7 +5,16 @@ use axum::{
 use crate::{cache, AppState, error::AppError};
 
 pub fn router() -> Router<AppState> {
-    Router::new().route("/pages/:slug", get(get_page))
+    Router::new()
+        .route("/pages", get(list_pages))
+        .route("/pages/:slug", get(get_page))
+}
+
+async fn list_pages(
+    State(state): State<AppState>,
+) -> Result<Json<Vec<common::Page>>, AppError> {
+    let pages = crate::db::pages::list(&state.db).await?;
+    Ok(Json(pages.into_iter().filter(|p| p.status == "published").collect()))
 }
 
 async fn get_page(

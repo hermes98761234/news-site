@@ -364,6 +364,7 @@ dependencies = [
  "common",
  "reqwest",
  "serde",
+ "serde_json",
  "tokio",
  "toml",
 ]

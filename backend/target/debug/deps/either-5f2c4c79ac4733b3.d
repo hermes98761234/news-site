@@ -1,9 +1,0 @@
-/home/user/projects/news-site/backend/target/debug/deps/either-5f2c4c79ac4733b3.d: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged_optional.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/iterator.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/into_either.rs
-
-/home/user/projects/news-site/backend/target/debug/deps/libeither-5f2c4c79ac4733b3.rmeta: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged_optional.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/iterator.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/into_either.rs
-
-/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/lib.rs:
-/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged.rs:
-/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/serde_untagged_optional.rs:
-/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/iterator.rs:
-/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/either-1.16.0/src/into_either.rs:
