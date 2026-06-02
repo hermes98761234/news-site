@@ -7,8 +7,12 @@ import { ArticleList } from '@/components/common/ArticleList'
 interface Props { params: { slug: string } }
 
 export async function generateStaticParams() {
-  const tags = await api.tags.list()
-  return tags.map(t => ({ slug: t.slug }))
+  try {
+    const tags = await api.tags.list()
+    return tags.map(t => ({ slug: t.slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

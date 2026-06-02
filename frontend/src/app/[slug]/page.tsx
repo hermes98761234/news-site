@@ -7,8 +7,12 @@ import { ArticleBody } from '@/components/common/ArticleBody'
 interface Props { params: { slug: string } }
 
 export async function generateStaticParams() {
-  const pages = await api.pages.list()
-  return pages.map(p => ({ slug: p.slug }))
+  try {
+    const pages = await api.pages.list()
+    return pages.map(p => ({ slug: p.slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

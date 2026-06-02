@@ -3,7 +3,12 @@ import { api } from '@/lib/api'
 import { ArticleList } from '@/components/common/ArticleList'
 
 export default async function HomePage() {
-  const articles = await api.articles.list(1, 20)
+  let articles
+  try {
+    articles = await api.articles.list(1, 20)
+  } catch {
+    articles = { items: [], total: 0, page: 1, limit: 20 }
+  }
 
   return (
     <div>

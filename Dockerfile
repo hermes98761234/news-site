@@ -4,12 +4,12 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci
 COPY frontend/ ./
-ARG NEXT_PUBLIC_API_URL=/
+ARG NEXT_PUBLIC_API_URL=http://localhost:3000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
 # Stage 2: Build Rust binaries
-FROM rust:1.78-alpine AS backend-build
+FROM rust:1.86-alpine AS backend-build
 RUN apk add --no-cache musl-dev
 WORKDIR /app
 COPY backend/ ./

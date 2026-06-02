@@ -10,8 +10,12 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const slugs = await api.articles.slugs()
-  return slugs.map((slug) => ({ slug }))
+  try {
+    const slugs = await api.articles.slugs()
+    return slugs.map((slug: string) => ({ slug }))
+  } catch {
+    return []
+  }
 }
 
 function formatDate(dateStr: string): string {
@@ -23,7 +27,12 @@ function formatDate(dateStr: string): string {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const data: ArticleWithTags = await api.articles.get(params.slug)
+  let data: ArticleWithTags
+  try {
+    data = await api.articles.get(params.slug)
+  } catch {
+    data = { id: 0, title: params.slug, body: '', slug: params.slug, created_at: '', updated_at: '', author_name: null, published_at: null, category_id: null }
+  }
   const { tags, category, ...a } = data
 
   return (

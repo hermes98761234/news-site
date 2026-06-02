@@ -7,8 +7,12 @@ import { ArticleList } from '@/components/common/ArticleList'
 interface Props { params: { slug: string } }
 
 export async function generateStaticParams() {
-  const cats = await api.categories.list()
-  return cats.map(c => ({ slug: c.slug }))
+  try {
+    const cats = await api.categories.list()
+    return cats.map(c => ({ slug: c.slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

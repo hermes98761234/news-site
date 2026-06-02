@@ -1,10 +1,13 @@
 // frontend/src/lib/api.ts
 import type { ArticleWithTags, Category, Page, PaginatedArticles, Setting, Tag } from './types'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
 async function fetchApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_URL}/api${path}`, { next: { revalidate: 300 } })
+  const res = await fetch(`${API_URL}/api${path}`, {
+    next: { revalidate: 300 },
+    signal: AbortSignal.timeout(5000),
+  })
   if (!res.ok) throw new Error(`API error ${res.status}: ${path}`)
   return res.json()
 }
