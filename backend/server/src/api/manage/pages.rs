@@ -43,7 +43,7 @@ async fn update_page(
     Json(input): Json<UpdatePage>,
 ) -> Result<Json<common::Page>, AppError> {
     let page = db::pages::update(&state.db, id, input).await?;
-    cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await?;
+    let _ = cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await;
     Ok(Json(page))
 }
 
@@ -53,7 +53,7 @@ async fn delete_page(
 ) -> Result<StatusCode, AppError> {
     let page = db::pages::get_by_id(&state.db, id).await?;
     db::pages::delete(&state.db, id).await?;
-    cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await?;
+    let _ = cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await;
     Ok(StatusCode::NO_CONTENT)
 }
 
@@ -62,6 +62,6 @@ async fn publish_page(
     Path(id): Path<i64>,
 ) -> Result<Json<common::Page>, AppError> {
     let page = db::pages::publish(&state.db, id).await?;
-    cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await?;
+    let _ = cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await;
     Ok(Json(page))
 }

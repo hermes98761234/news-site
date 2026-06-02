@@ -25,7 +25,7 @@ async fn create_category(
     Json(input): Json<CreateCategory>,
 ) -> Result<Json<common::Category>, AppError> {
     let category = db::categories::create(&state.db, input).await?;
-    cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await?;
+    let _ = cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await;
     Ok(Json(category))
 }
 
@@ -44,7 +44,7 @@ async fn update_category(
 ) -> Result<Json<common::Category>, AppError> {
     let existing = db::categories::get_by_slug(&state.db, &slug).await?;
     let category = db::categories::update(&state.db, existing.id, input).await?;
-    cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await?;
+    let _ = cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await;
     Ok(Json(category))
 }
 
@@ -53,6 +53,6 @@ async fn delete_category(
     Path(slug): Path<String>,
 ) -> Result<StatusCode, AppError> {
     db::categories::delete(&state.db, &slug).await?;
-    cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await?;
+    let _ = cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await;
     Ok(StatusCode::NO_CONTENT)
 }

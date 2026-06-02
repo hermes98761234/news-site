@@ -30,8 +30,8 @@ async fn create_article(
     Json(input): Json<CreateArticle>,
 ) -> Result<Json<common::Article>, AppError> {
     let article = db::articles::create(&state.db, input).await?;
-    cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
-    cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
+    let _ = cache::del(&state.cache, cache::keys::ARTICLES_LIST).await;
+    let _ = cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await;
     Ok(Json(article))
 }
 
@@ -49,9 +49,9 @@ async fn update_article(
     Json(input): Json<UpdateArticle>,
 ) -> Result<Json<common::Article>, AppError> {
     let article = db::articles::update(&state.db, id, input).await?;
-    cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
-    cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await?;
-    cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
+    let _ = cache::del(&state.cache, cache::keys::ARTICLES_LIST).await;
+    let _ = cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await;
+    let _ = cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await;
     Ok(Json(article))
 }
 
@@ -61,9 +61,9 @@ async fn delete_article(
 ) -> Result<StatusCode, AppError> {
     let article = db::articles::get_by_id(&state.db, id).await?;
     db::articles::delete(&state.db, id).await?;
-    cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
-    cache::del(&state.cache, &cache::keys::article_slug(&article.article.slug)).await?;
-    cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
+    let _ = cache::del(&state.cache, cache::keys::ARTICLES_LIST).await;
+    let _ = cache::del(&state.cache, &cache::keys::article_slug(&article.article.slug)).await;
+    let _ = cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await;
     Ok(StatusCode::NO_CONTENT)
 }
 
@@ -72,9 +72,9 @@ async fn publish_article(
     Path(id): Path<i64>,
 ) -> Result<Json<common::Article>, AppError> {
     let article = db::articles::publish(&state.db, id).await?;
-    cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
-    cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await?;
-    cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
+    let _ = cache::del(&state.cache, cache::keys::ARTICLES_LIST).await;
+    let _ = cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await;
+    let _ = cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await;
     Ok(Json(article))
 }
 async fn archive_article(
@@ -82,8 +82,8 @@ async fn archive_article(
     Path(id): Path<i64>,
 ) -> Result<Json<common::Article>, AppError> {
     let article = db::articles::archive(&state.db, id).await?;
-    cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
-    cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await?;
-    cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
+    let _ = cache::del(&state.cache, cache::keys::ARTICLES_LIST).await;
+    let _ = cache::del(&state.cache, &cache::keys::article_slug(&article.slug)).await;
+    let _ = cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await;
     Ok(Json(article))
 }

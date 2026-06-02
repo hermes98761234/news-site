@@ -53,10 +53,10 @@ async fn delete_setting(
 async fn flush_cache(
     State(state): State<AppState>,
 ) -> Result<StatusCode, AppError> {
-    cache::flush_pattern(&state.cache, "articles:*").await?;
-    cache::flush_pattern(&state.cache, "pages:*").await?;
-    cache::flush_pattern(&state.cache, "tags:*").await?;
-    cache::flush_pattern(&state.cache, "categories:*").await?;
-    cache::flush_pattern(&state.cache, "feed:*").await?;
+    let _ = cache::flush_pattern(&state.cache, "articles:*").await;
+    let _ = cache::flush_pattern(&state.cache, "pages:*").await;
+    let _ = cache::flush_pattern(&state.cache, "tags:*").await;
+    let _ = cache::flush_pattern(&state.cache, "categories:*").await;
+    let _ = cache::flush_pattern(&state.cache, "feed:*").await;
     Ok(StatusCode::NO_CONTENT)
 }

@@ -1,20 +1,10 @@
-mod api;
-mod cache;
-mod config;
-mod db;
-mod error;
+// backend/server/src.main.rs
+// Binary entry point. All shared code is in lib.rs.
 
 use sqlx::sqlite::SqlitePoolOptions;
 use std::sync::Arc;
 use tower_http::services::ServeDir;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-#[derive(Clone)]
-pub struct AppState {
-    pub db: sqlx::SqlitePool,
-    pub cache: cache::RedisPool,
-    pub config: Arc<config::Config>,
-}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -25,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let config = Arc::new(config::Config::from_env()?);
+    let config = Arc::new(server::config::Config::from_env()?);
 
     let db = SqlitePoolOptions::new()
         .max_connections(5)
@@ -35,8 +25,8 @@ async fn main() -> anyhow::Result<()> {
 
     let cache = redis::Client::open(config.valkey_url.clone())?;
 
-    let state = AppState { db, cache, config: config.clone() };
-    let mut router = api::router(state);
+    let state = server::AppState { db, cache, config: config.clone() };
+    let mut router = server::api::router(state);
 
     if let Some(ref static_dir) = config.static_dir {
         router = router.fallback_service(ServeDir::new(static_dir));

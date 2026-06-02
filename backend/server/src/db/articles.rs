@@ -1,3 +1,4 @@
+// backend/server/src/db/articles.rs
 use crate::error::AppError;
 use common::{Article, ArticleListParams, ArticleWithTags, Category, CreateArticle, Tag, UpdateArticle};
 use sqlx::SqlitePool;
@@ -107,35 +108,54 @@ pub async fn list(
     let page = params.page.unwrap_or(1).max(1);
     let limit = params.limit.unwrap_or(20).min(100);
     let offset = (page - 1) * limit;
-    let status_filter = status.unwrap_or("published");
 
-    let articles = sqlx::query_as::<_, Article>(
-        "SELECT a.* FROM articles a
-         LEFT JOIN categories c ON c.id = a.category_id
-         WHERE a.status = ?
-           AND (? IS NULL OR c.slug = ?)
-         ORDER BY a.published_at DESC, a.created_at DESC
-         LIMIT ? OFFSET ?"
-    )
-    .bind(status_filter)
-    .bind(&params.category)
-    .bind(&params.category)
-    .bind(limit)
-    .bind(offset)
-    .fetch_all(pool)
-    .await?;
+    // Build query based on whether status filter is provided
+    let (articles_sql, count_sql) = match status {
+        Some(s) => {
+            let articles_sql = format!(
+                "SELECT a.* FROM articles a
+                 LEFT JOIN categories c ON c.id = a.category_id
+                 WHERE a.status = '{s}'
+                   AND (? IS NULL OR c.slug = ?)
+                 ORDER BY a.published_at DESC, a.created_at DESC
+                 LIMIT {limit} OFFSET {offset}"
+            );
+            let count_sql = format!(
+                "SELECT COUNT(*) FROM articles a
+                 LEFT JOIN categories c ON c.id = a.category_id
+                 WHERE a.status = '{s}'
+                   AND (? IS NULL OR c.slug = ?)"
+            );
+            (articles_sql, count_sql)
+        }
+        None => {
+            let articles_sql = format!(
+                "SELECT a.* FROM articles a
+                 LEFT JOIN categories c ON c.id = a.category_id
+                 WHERE (? IS NULL OR c.slug = ?)
+                 ORDER BY a.published_at DESC, a.created_at DESC
+                 LIMIT {limit} OFFSET {offset}"
+            );
+            let count_sql = format!(
+                "SELECT COUNT(*) FROM articles a
+                 LEFT JOIN categories c ON c.id = a.category_id
+                 WHERE (? IS NULL OR c.slug = ?)"
+            );
+            (articles_sql, count_sql)
+        }
+    };
 
-    let total = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM articles a
-         LEFT JOIN categories c ON c.id = a.category_id
-         WHERE a.status = ?
-           AND (? IS NULL OR c.slug = ?)"
-    )
-    .bind(status_filter)
-    .bind(&params.category)
-    .bind(&params.category)
-    .fetch_one(pool)
-    .await?;
+    let articles = sqlx::query_as::<_, Article>(&articles_sql)
+        .bind(&params.category)
+        .bind(&params.category)
+        .fetch_all(pool)
+        .await?;
+
+    let total = sqlx::query_scalar::<_, i64>(&count_sql)
+        .bind(&params.category)
+        .bind(&params.category)
+        .fetch_one(pool)
+        .await?;
 
     let mut result = Vec::new();
     for article in articles {
