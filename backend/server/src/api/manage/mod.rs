@@ -1,5 +1,6 @@
 // backend/server/src/api/manage/mod.rs
 mod articles;
+mod cache;
 mod categories;
 mod pages;
 mod settings;
@@ -15,4 +16,5 @@ pub fn router() -> Router<AppState> {
         .merge(tags::router())
         .merge(categories::router())
         .merge(settings::router())
+        .merge(cache::router())
 }
