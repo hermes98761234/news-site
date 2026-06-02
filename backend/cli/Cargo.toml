@@ -1,0 +1,19 @@
+[package]
+name = "cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "news-cli"
+path = "src/main.rs"
+
+[dependencies]
+common = { path = "../common" }
+clap = { version = "4", features = ["derive"] }
+reqwest = { version = "0.12", features = ["json"] }
+toml = "0.8"
+serde = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+comfy-table = "7"
+colored = "2"

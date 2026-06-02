@@ -1,0 +1,5 @@
+/home/user/projects/news-site/backend/target/debug/deps/sqlx_macros-37a3e75c7ca48c10.d: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.7.4/src/lib.rs
+
+/home/user/projects/news-site/backend/target/debug/deps/libsqlx_macros-37a3e75c7ca48c10.so: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.7.4/src/lib.rs
+
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.7.4/src/lib.rs:

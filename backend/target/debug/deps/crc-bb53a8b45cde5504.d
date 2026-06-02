@@ -1,0 +1,12 @@
+/home/user/projects/news-site/backend/target/debug/deps/crc-bb53a8b45cde5504.d: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc128.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc16.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc32.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc64.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc8.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/table.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/util.rs
+
+/home/user/projects/news-site/backend/target/debug/deps/libcrc-bb53a8b45cde5504.rmeta: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc128.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc16.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc32.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc64.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc8.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/table.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/util.rs
+
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/lib.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc128.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc16.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc32.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc64.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/crc8.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/table.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crc-3.4.0/src/util.rs:
