@@ -23,3 +23,16 @@ impl IntoResponse for AppError {
         (status, Json(json!({ "error": message }))).into_response()
     }
 }
+
+impl From<anyhow::Error> for AppError {
+    fn from(e: anyhow::Error) -> Self { AppError::Internal(e) }
+}
+
+impl From<sqlx::Error> for AppError {
+    fn from(e: sqlx::Error) -> Self {
+        match e {
+            sqlx::Error::RowNotFound => AppError::NotFound("not found".to_string()),
+            _ => AppError::Internal(e.into()),
+        }
+    }
+}
