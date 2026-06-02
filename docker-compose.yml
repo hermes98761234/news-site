@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: /data/news.db
+      SERVER_PORT: 3000
+      STATIC_DIR: /app/static
+      VALKEY_URL: redis://valkey:6379
+      CLI_TOKEN: ${CLI_TOKEN:-change-me-in-production}
+      RUST_LOG: info
+    volumes:
+      - app-data:/data
+    depends_on:
+      valkey:
+        condition: service_healthy
+    restart: unless-stopped
+
+  valkey:
+    image: valkey/valkey:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey-data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  app-data:
+  valkey-data:
