@@ -101,7 +101,7 @@ pub struct UpdateCategory {
     pub description: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Setting {
     pub key: String,
     pub value: String,
@@ -120,7 +120,7 @@ pub struct ArticleListParams {
     pub category: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PaginatedArticles {
     pub items: Vec<ArticleWithTags>,
     pub total: i64,
