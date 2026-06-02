@@ -23,13 +23,13 @@ pub async fn set<T: serde::Serialize>(
 ) -> Result<()> {
     let mut conn = client.get_multiplexed_async_connection().await?;
     let serialized = serde_json::to_string(value)?;
-    conn.set_ex(key, serialized, ttl_secs).await?;
+    conn.set_ex::<_, _, ()>(key, serialized, ttl_secs).await?;
     Ok(())
 }
 
 pub async fn del(client: &RedisPool, key: &str) -> Result<()> {
     let mut conn = client.get_multiplexed_async_connection().await?;
-    conn.del(key).await?;
+    conn.del::<_, ()>(key).await?;
     Ok(())
 }
 
@@ -37,7 +37,7 @@ pub async fn flush_pattern(client: &RedisPool, pattern: &str) -> Result<()> {
     let mut conn = client.get_multiplexed_async_connection().await?;
     let keys: Vec<String> = conn.keys(pattern).await?;
     if !keys.is_empty() {
-        conn.del(keys).await?;
+        conn.del::<_, ()>(keys).await?;
     }
     Ok(())
 }
