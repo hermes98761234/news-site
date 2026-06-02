@@ -33,12 +33,7 @@ async fn get_page(
     State(state): State<AppState>,
     Path(id): Path<i64>,
 ) -> Result<Json<common::Page>, AppError> {
-    // Fetch by id — reuse slug pattern
-    let page = sqlx::query_as::<_, common::Page>("SELECT * FROM pages WHERE id = ?")
-        .bind(id)
-        .fetch_optional(&state.db)
-        .await?
-        .ok_or_else(|| AppError::NotFound(format!("page {id} not found")))?;
+    let page = db::pages::get_by_id(&state.db, id).await?;
     Ok(Json(page))
 }
 
@@ -56,7 +51,9 @@ async fn delete_page(
     State(state): State<AppState>,
     Path(id): Path<i64>,
 ) -> Result<StatusCode, AppError> {
+    let page = db::pages::get_by_id(&state.db, id).await?;
     db::pages::delete(&state.db, id).await?;
+    cache::del(&state.cache, &cache::keys::page_slug(&page.slug)).await?;
     Ok(StatusCode::NO_CONTENT)
 }
 

@@ -17,7 +17,6 @@ async fn list_categories(
     State(state): State<AppState>,
 ) -> Result<Json<Vec<common::Category>>, AppError> {
     let categories = db::categories::list(&state.db).await?;
-    cache::del(&state.cache, cache::keys::CATEGORIES_LIST).await?;
     Ok(Json(categories))
 }
 

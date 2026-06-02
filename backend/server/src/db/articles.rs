@@ -39,6 +39,36 @@ pub async fn create(pool: &SqlitePool, input: CreateArticle) -> Result<Article, 
     Ok(article)
 }
 
+pub async fn get_by_id(pool: &SqlitePool, id: i64) -> Result<ArticleWithTags, AppError> {
+    let article = sqlx::query_as::<_, Article>(
+        "SELECT * FROM articles WHERE id = ?"
+    )
+    .bind(id)
+    .fetch_optional(pool)
+    .await?
+    .ok_or_else(|| AppError::NotFound(format!("article {id} not found")))?;
+
+    let tags = sqlx::query_as::<_, Tag>(
+        "SELECT t.* FROM tags t
+         JOIN article_tags at ON at.tag_id = t.id
+         WHERE at.article_id = ?"
+    )
+    .bind(article.id)
+    .fetch_all(pool)
+    .await?;
+
+    let category = if let Some(cat_id) = article.category_id {
+        sqlx::query_as::<_, Category>("SELECT * FROM categories WHERE id = ?")
+            .bind(cat_id)
+            .fetch_optional(pool)
+            .await?
+    } else {
+        None
+    };
+
+    Ok(ArticleWithTags { article, tags, category })
+}
+
 pub async fn get_by_slug(pool: &SqlitePool, slug: &str) -> Result<ArticleWithTags, AppError> {
     let article = sqlx::query_as::<_, Article>(
         "SELECT * FROM articles WHERE slug = ?"

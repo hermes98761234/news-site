@@ -20,6 +20,14 @@ pub async fn create(pool: &SqlitePool, input: CreatePage) -> Result<Page, AppErr
     .await?)
 }
 
+pub async fn get_by_id(pool: &SqlitePool, id: i64) -> Result<Page, AppError> {
+    sqlx::query_as::<_, Page>("SELECT * FROM pages WHERE id = ?")
+        .bind(id)
+        .fetch_optional(pool)
+        .await?
+        .ok_or_else(|| AppError::NotFound(format!("page {id} not found")))
+}
+
 pub async fn get_by_slug(pool: &SqlitePool, slug: &str) -> Result<Page, AppError> {
     sqlx::query_as::<_, Page>("SELECT * FROM pages WHERE slug = ?")
         .bind(slug)

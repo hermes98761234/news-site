@@ -39,7 +39,7 @@ async fn get_article(
     State(state): State<AppState>,
     Path(id): Path<i64>,
 ) -> Result<Json<common::ArticleWithTags>, AppError> {
-    let article = db::articles::get_by_slug(&state.db, &id.to_string()).await?;
+    let article = db::articles::get_by_id(&state.db, id).await?;
     Ok(Json(article))
 }
 
@@ -59,8 +59,10 @@ async fn delete_article(
     State(state): State<AppState>,
     Path(id): Path<i64>,
 ) -> Result<StatusCode, AppError> {
+    let article = db::articles::get_by_id(&state.db, id).await?;
     db::articles::delete(&state.db, id).await?;
     cache::del(&state.cache, cache::keys::ARTICLES_LIST).await?;
+    cache::del(&state.cache, &cache::keys::article_slug(&article.article.slug)).await?;
     cache::del(&state.cache, cache::keys::HOMEPAGE_FEED).await?;
     Ok(StatusCode::NO_CONTENT)
 }
