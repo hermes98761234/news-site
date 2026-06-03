@@ -14,15 +14,15 @@ News Site is a lightweight, single-server news management platform for publishin
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Next.js 14 (React 18), Tailwind CSS, TypeScript |
-| Backend | Rust, Axum 0.7, SQLx 0.7 (SQLite), Redis 0.25 |
-| CLI | Rust, Clap 4, Reqwest |
-| Database | SQLite (via SQLx migrations) |
-| Cache | Valkey 7 (Redis-compatible) |
-| Runtime | Docker (3-stage build: Node → Rust → Alpine) |
-| Testing | Vitest + React Testing Library (unit), Playwright (E2E) |
+| Layer      | Technology                                      |
+|------------|-------------------------------------------------|
+| Frontend   | Next.js 14 (React 18), Tailwind CSS, TypeScript |
+| Backend    | Rust, Axum 0.7, SQLx 0.7 (SQLite), redis 0.25  |
+| CLI        | Rust, Clap 4, Reqwest 0.12                      |
+| Database   | SQLite (via SQLx migrations)                    |
+| Cache      | Valkey 7 (Redis-compatible)                     |
+| Runtime    | Docker (multi-stage build: Node → Rust → Alpine) |
+| Testing    | Vitest + React Testing Library (frontend unit), Playwright (E2E), Rust integration tests (backend) |
 
 ## Quick Start (Docker)
 
@@ -50,7 +50,7 @@ npm ci
 npm run build
 
 # Run the server
-DATABASE_URL=/path/to/news.db STATIC_DIR=frontend/out ./backend/target/release/server
+DATABASE_URL=sqlite://news.db STATIC_DIR=frontend/out ./backend/target/release/server
 ```
 
 ## CLI Usage (`news-cli`)
@@ -127,7 +127,7 @@ docker compose exec app news-cli article list
 
 ```
 news-site/
-├── backend/                  # Rust workspace
+├── backend/                  # Rust workspace (common, server, cli)
 │   ├── common/               # Shared types (models, DB schemas)
 │   ├── server/               # Axum HTTP server
 │   │   └── src/
@@ -136,9 +136,13 @@ news-site/
 │   │       │   └── manage/   # Authenticated management endpoints
 │   │       ├── cache/        # Valkey/Redis caching layer
 │   │       ├── db/           # SQLx queries (articles, categories, tags, pages, settings)
-│   │       └── config.rs     # Server configuration
+│   │       ├── config.rs     # Server configuration
+│   │       └── error.rs      # Error handling
 │   ├── cli/                  # news-cli management tool
-│   │   └── src/commands/     # article, category, tag, page, settings, cache
+│   │   └── src/
+│   │       ├── commands/     # article, category, tag, page, settings, cache
+│   │       ├── client.rs     # HTTP client for the management API
+│   │       └── config.rs     # CLI configuration (token, base URL)
 │   └── migrations/           # SQLite schema migrations (001–006)
 ├── frontend/                 # Next.js 14 app
 │   └── src/
@@ -152,11 +156,12 @@ news-site/
 │       ├── components/       # UI components (common, layout)
 │       ├── lib/              # API client, types
 │       └── styles/           # Tailwind CSS
-├── Dockerfile                # 3-stage build (Node → Rust → Alpine)
+├── docs/                     # Additional documentation
+│   └── superpowers/          # Project specs and plans
+├── Dockerfile                # Multi-stage build (Node → Rust → Alpine)
 ├── docker-compose.yml        # Production stack (app + Valkey)
 ├── docker-compose.test.yml   # Test profile (adds smoke-test container)
-├── .env.example              # Environment variable template
-└── docs/                     # Additional documentation
+└── .env.example              # Environment variable template
 ```
 
 ## API Endpoints
@@ -192,7 +197,7 @@ Management endpoints require an `Authorization: Bearer <CLI_TOKEN>` header.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `CLI_TOKEN` | *(required)* | Secret token for management API / CLI auth |
-| `DATABASE_URL` | `sqlite:///data/news.db` | SQLite database path |
+| `DATABASE_URL` | `sqlite://news.db` | SQLite database path |
 | `VALKEY_URL` | `redis://valkey:6379` | Valkey/Redis connection URL |
 | `SERVER_PORT` | `3000` | Port the server listens on |
 | `STATIC_DIR` | `/app/static` | Path to Next.js static output |
@@ -207,6 +212,9 @@ cd frontend && npm test
 
 # Frontend E2E tests (Playwright)
 cd frontend && npx playwright install && npm run test:e2e
+
+# Backend integration tests (Rust)
+cd backend && cargo test -p server
 
 # Docker smoke test
 docker compose -f docker-compose.test.yml --profile test up --abort-on-container-exit
