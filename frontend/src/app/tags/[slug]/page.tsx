@@ -1,10 +1,12 @@
 // frontend/src/app/tags/[slug]/page.tsx
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { api } from '@/lib/api'
 import { ArticleList } from '@/components/common/ArticleList'
+import type { ArticleWithTags } from '@/lib/types'
 
 interface Props { params: { slug: string } }
+
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   try {
@@ -20,11 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TagPage({ params }: Props) {
-  let items
+  let items: ArticleWithTags[] = []
   try {
     items = await api.tags.articles(params.slug)
   } catch {
-    notFound()
+    // API unavailable or tag not found — render empty list
   }
   return (
     <div>

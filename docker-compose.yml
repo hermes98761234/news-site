@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: /data/news.db
+      DATABASE_URL: sqlite:///data/news.db
       SERVER_PORT: 3000
       STATIC_DIR: /app/static
       VALKEY_URL: redis://valkey:6379

@@ -1,10 +1,12 @@
 // frontend/src/app/categories/[slug]/page.tsx
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { api } from '@/lib/api'
 import { ArticleList } from '@/components/common/ArticleList'
+import type { PaginatedArticles } from '@/lib/types'
 
 interface Props { params: { slug: string } }
+
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   try {
@@ -20,11 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  let data
+  let data: PaginatedArticles | undefined
   try {
     data = await api.categories.articles(params.slug, params.slug)
   } catch {
-    notFound()
+    // API unavailable or category not found — render empty list
   }
   return (
     <div>

@@ -1,7 +1,8 @@
 // backend/server/src.main.rs
 // Binary entry point. All shared code is in lib.rs.
 
-use sqlx::sqlite::SqlitePoolOptions;
+use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
+use std::str::FromStr;
 use std::sync::Arc;
 use tower_http::services::ServeDir;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -17,9 +18,11 @@ async fn main() -> anyhow::Result<()> {
 
     let config = Arc::new(server::config::Config::from_env()?);
 
+    let opts = SqliteConnectOptions::from_str(&config.database_url)?
+        .create_if_missing(true);
     let db = SqlitePoolOptions::new()
         .max_connections(5)
-        .connect(&config.database_url)
+        .connect_with(opts)
         .await?;
     sqlx::migrate!("../migrations").run(&db).await?;
 

@@ -1,7 +1,11 @@
 // frontend/src/lib/api.ts
 import type { ArticleWithTags, Category, Page, PaginatedArticles, Setting, Tag } from './types'
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
+const API_URL = (
+  typeof window === 'undefined'
+    ? (process.env.NEXT_SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')
+    : (process.env.NEXT_PUBLIC_API_URL || '/')
+).replace(/\/+$/, '')
 
 async function fetchApi<T>(path: string): Promise<T> {
   const res = await fetch(`${API_URL}/api${path}`, {

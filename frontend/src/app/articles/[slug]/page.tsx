@@ -31,7 +31,7 @@ export default async function ArticlePage({ params }: Props) {
   try {
     data = await api.articles.get(params.slug)
   } catch {
-    data = { id: 0, title: params.slug, body: '', slug: params.slug, created_at: '', updated_at: '', author_name: null, published_at: null, category_id: null }
+    data = { id: 0, title: params.slug, body: '', slug: params.slug, excerpt: '', status: 'published' as const, created_at: '', updated_at: '', author_name: '', published_at: null, category_id: null, tags: [], category: null }
   }
   const { tags, category, ...a } = data
 

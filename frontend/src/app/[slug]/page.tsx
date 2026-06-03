@@ -1,10 +1,12 @@
 // frontend/src/app/[slug]/page.tsx
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { api } from '@/lib/api'
 import { ArticleBody } from '@/components/common/ArticleBody'
+import type { Page } from '@/lib/types'
 
 interface Props { params: { slug: string } }
+
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   try {
@@ -25,11 +27,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function StaticPage({ params }: Props) {
-  let page
+  let page: Page | undefined
   try {
     page = await api.pages.get(params.slug)
   } catch {
-    notFound()
+    // API unavailable or page not found
+  }
+  if (!page) {
+    return <div className="max-w-2xl"><p className="text-gray-500">Page not found.</p></div>
   }
   return (
     <div className="max-w-2xl">

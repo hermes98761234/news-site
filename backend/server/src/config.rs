@@ -11,7 +11,7 @@ impl Config {
     pub fn from_env() -> anyhow::Result<Self> {
         Ok(Self {
             database_url: std::env::var("DATABASE_URL")
-                .unwrap_or_else(|_| "news.db".to_string()),
+                .unwrap_or_else(|_| "sqlite://news.db".to_string()),
             valkey_url: std::env::var("VALKEY_URL")
                 .unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string()),
             cli_token: std::env::var("CLI_TOKEN")
